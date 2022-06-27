@@ -260,11 +260,11 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=https"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.itpb.se`)"
+      - "traefik.http.routers.portainer.rule=Host(`${PORTAINERDOMAIN}`)"
       - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
       - "traefik.http.services.portainer.loadbalancer.server.port=9443"
       - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.routers.portainer.tls.domains[0].main=portainer.itpb.se"
+      - "traefik.http.routers.portainer.tls.domains[0].main=${PORTAINERDOMAIN}"
     networks:
             - net1
 
