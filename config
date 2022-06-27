@@ -1,0 +1,49 @@
+---
+username: <switchadmin>
+password: <insert password>
+model: procurve
+resolve_dns: true
+interval: 3600
+use_syslog: false
+debug: false
+threads: 30
+timeout: 20
+retries: 3
+prompt: !ruby/regexp /^([\w.@-]+[#>]\s?)$/
+rest: 0.0.0.0:8888
+next_adds_job: false
+vars: {}
+groups: {}
+models: {}
+pid: "/root/.config/oxidized/pid"
+crash:
+  directory: "/root/.config/oxidized/crashes"
+  hostnames: false
+stats:
+  history_size: 10
+input:
+  default: ssh, telnet
+  debug: false
+  ssh:
+    secure: false
+  ftp:
+    passive: true
+  utf8_encoded: true
+output:
+  default: git
+  debug: true
+  git:
+    user: Oxidized
+    email: o@example.com
+    repo: "/root/.config/oxidized/devices.git"
+source:
+  default: http
+  debug: false
+  http:
+    url: http://172.23.240.22:8000/api/v0/oxidized
+    map:
+      name: hostname
+      model: os
+      group: group
+    headers:
+      X-Auth-Token: <insert API token> 

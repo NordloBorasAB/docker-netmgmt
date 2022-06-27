@@ -1,0 +1,97 @@
+version: "3.5"
+
+services:
+  traefik:
+    image: traefik:2.3
+    container_name: traefik
+    command:
+      - "--global.checknewversion=false"
+      - "--global.sendanonymoususage=false"
+      - "--log=true"
+      - "--log.level=INFO"
+      - "--entrypoints.http=true"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.http.http.redirections.entrypoint.to=https"
+      - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.https=true"
+      - "--entrypoints.https.address=:443"
+        #Settings for LetsEncrypt.
+      - "--certificatesresolvers.letsencrypt"
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
+      - "--providers.docker"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.exposedbydefault=false" 
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: tcp
+    volumes:
+      - "./acme.json:/acme.json"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+           - net1 
+    restart: unless-stopped
+
+  phpipam-web:
+    image: phpipam/phpipam-www:1.4x
+    environment:
+      - TZ=${TZ}
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
+      - IPAM_DATABASE_WEBHOST=%
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"          
+      - "traefik.http.routers.phpipam.entrypoints=https"
+      - "traefik.http.routers.phpipam.rule=Host(`${IPAMDOMAIN}`)"
+      - "traefik.http.routers.phpipam.tls=true"
+      - "traefik.http.routers.phpipam.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.phpipam.tls.domains[0].main=${IPAMDOMAIN}"
+      - "traefik.http.services.phpipam.loadbalancer.server.port=80"
+    volumes:
+      - "./phpipam-logo:/phpipam/css/images/logo"
+    depends_on:
+      - phpipam-mariadb
+    networks:
+            - net1
+
+
+  phpipam-cron:
+    image: phpipam/phpipam-cron:1.4x
+    environment:
+      - TZ=${TZ}
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
+      - SCAN_INTERVAL=1h
+    restart: unless-stopped
+    depends_on:
+      - phpipam-mariadb
+    networks:
+            - net1
+
+  phpipam-mariadb:
+    image: mariadb:10.5.9-focal
+    environment:
+      - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
+    restart: unless-stopped
+    volumes:
+      - "./phpipam-db-data:/var/lib/mysql"
+    networks:
+            - net1
+
+
+networks:
+        net1:
+          driver: bridge
+          ipam:
+            driver: default
+            config:
+                    - subnet: ${SUBNET}
+          
+           
