@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   traefik:
-    image: traefik:2.3
+    image: traefik:2.7
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -15,7 +15,6 @@ services:
       - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.https=true"
       - "--entrypoints.https.address=:443"
-        #Settings for LetsEncrypt.
       - "--certificatesresolvers.letsencrypt"
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
       - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
@@ -23,8 +22,9 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
       - "--providers.docker"
       - "--providers.docker.watch=true"
-      - "--providers.docker.exposedbydefault=false" 
-      
+      - "--providers.docker.exposedbydefault=false"
+      - "--serverstransport.insecureskipverify=true"
+
     ports:
       - target: 80
         published: 80
@@ -36,11 +36,11 @@ services:
       - "./acme.json:/acme.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
-           - net1 
+           - net1
     restart: unless-stopped
 
   db:
-    image: mariadb:10.4
+    image: mariadb:10.5
     container_name: librenms_db
     command:
       - "mysqld"
@@ -58,7 +58,7 @@ services:
       - "MYSQL_USER=${MYSQL_USER}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
     networks:
-            - net1 
+            - net1
     restart: unless-stopped
 
   memcached:
@@ -67,16 +67,16 @@ services:
     environment:
       - "TZ=${TZ}"
     networks:
-            - net1 
+            - net1
     restart: unless-stopped
-  
+
   redis:
     image: redis:5.0-alpine
     container_name: librenms_redis
     environment:
       - "TZ=${TZ}"
     networks:
-            - net1 
+            - net1
     restart: always
 
   smtp:
@@ -90,11 +90,11 @@ services:
       - "SMTP_USERNAME=${SMTP_USERNAME}"
       - "SMTP_PASSWORD=${SMTP_PASSWORD}"
     networks:
-            - net1 
+            - net1
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:21.2.0
+    image: librenms/librenms:22.6.0
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -109,7 +109,6 @@ services:
       - "traefik.http.routers.librenms.entrypoints=https"
       - "traefik.http.routers.librenms.rule=Host(`${LIBREDOMAIN}`)"
       - "traefik.http.routers.librenms.tls=true"
-      - "traefik.http.routers.librenms.tls.certresolver=letsencrypt"
       - "traefik.http.routers.librenms.tls.domains[0].main=${LIBREDOMAIN}"
       - "traefik.http.services.librenms.loadbalancer.server.port=8000"
     environment:
@@ -129,7 +128,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:21.2.0
+    image: librenms/librenms:22.6.0
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -154,11 +153,11 @@ services:
       - "REDIS_DB=0"
       - "SIDECAR_DISPATCHER=1"
     networks:
-            - net1 
+            - net1
     restart: always
-  
+
   syslog-ng:
-    image: librenms/librenms:21.2.0
+    image: librenms/librenms:22.6.0
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -190,7 +189,7 @@ services:
     restart: unless-stopped
 
   phpipam-web:
-    image: phpipam/phpipam-www:1.4x
+    image: phpipam/phpipam-www:1.5x
     environment:
       - TZ=${TZ}
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -198,23 +197,23 @@ services:
       - IPAM_DATABASE_WEBHOST=%
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"          
+      - "traefik.enable=true"
       - "traefik.http.routers.phpipam.entrypoints=https"
       - "traefik.http.routers.phpipam.rule=Host(`${IPAMDOMAIN}`)"
       - "traefik.http.routers.phpipam.tls=true"
-      - "traefik.http.routers.phpipam.tls.certresolver=letsencrypt"
       - "traefik.http.routers.phpipam.tls.domains[0].main=${IPAMDOMAIN}"
       - "traefik.http.services.phpipam.loadbalancer.server.port=80"
     volumes:
       - "./phpipam-logo:/phpipam/css/images/logo"
+      - "./phpipam-web-ldap/ca-certificates.crt:/etc/openldap/ca-certificates.crt"
+      - "./phpipam-web-ldap/ldap.conf:/etc/openldap/ldap.conf"
     depends_on:
       - phpipam-mariadb
     networks:
             - net1
 
-
   phpipam-cron:
-    image: phpipam/phpipam-cron:1.4x
+    image: phpipam/phpipam-cron:1.5x
     environment:
       - TZ=${TZ}
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -226,9 +225,8 @@ services:
     networks:
             - net1
 
-
   phpipam-mariadb:
-    image: mariadb:10.5.9-focal
+    image: mariadb:10.7.4-focal
     environment:
       - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
     restart: unless-stopped
@@ -250,6 +248,26 @@ services:
            net1:
               ipv4_address: ${OXIDIP}
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    security_opt:
+      -  no-new-privileges:true
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./portainer:/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=https"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.itpb.se`)"
+      - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9443"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.tls.domains[0].main=portainer.itpb.se"
+    networks:
+            - net1
+
 networks:
         net1:
           driver: bridge
@@ -257,5 +275,3 @@ networks:
             driver: default
             config:
                     - subnet: ${SUBNET}
-          
-           
