@@ -1,9 +1,13 @@
 <h1> Docker med IPAM, LibreNMS och Oxidized för network management </h1>
 
+<p>Installera Docker:</p>
+
+<code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
+<code>$ sudo sh get-docker.sh</code>
+
 <p> Bygger på officiella dockerimages för phpIPAM, librenms och Oxidized. 
 Satt fasta versioner för att slippa buggar vid installation. Nya versioner kommer testas och då uppdateras docker-compose.yml
 </p>
-
 
 <p> traefik är reverseproxy för all web. redirectar http till https för de två namn som anges i .env -filen.
 Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port80 kommer ett traefik
