@@ -205,8 +205,6 @@ services:
       - "traefik.http.services.phpipam.loadbalancer.server.port=80"
     volumes:
       - "./phpipam-logo:/phpipam/css/images/logo"
-      - "./phpipam-web-ldap/ca-certificates.crt:/etc/openldap/ca-certificates.crt"
-      - "./phpipam-web-ldap/ldap.conf:/etc/openldap/ldap.conf"
     depends_on:
       - phpipam-mariadb
     networks:
