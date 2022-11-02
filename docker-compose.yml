@@ -188,18 +188,18 @@ services:
             - net1
     restart: unless-stopped
 
-  oxidized:
-    restart: unless-stopped
-    image: oxidized/oxidized:latest
-    environment:
-      CONFIG_RELOAD_INTERVAL: 600
-    volumes:
-      - ./oxidized:/root/.config/oxidized
-    #command removes pid-file if it exsist on boot. prevents fail on boot
-    command: bash -c 'rm /root/.config/oxidized/pid; /sbin/my_init'
-    networks:
-           net1:
-              ipv4_address: ${OXIDIP}
+  #oxidized:
+  #  restart: unless-stopped
+  #  image: oxidized/oxidized:latest
+  #  environment:
+  #    CONFIG_RELOAD_INTERVAL: 600
+  #  volumes:
+  #    - ./oxidized:/root/.config/oxidized
+  #  #command removes pid-file if it exsist on boot. prevents fail on boot
+  #  command: bash -c 'rm /root/.config/oxidized/pid; /sbin/my_init'
+  #  networks:
+  #         net1:
+  #            ipv4_address: ${OXIDIP}
 
   portainer:
     image: portainer/portainer-ce:latest
