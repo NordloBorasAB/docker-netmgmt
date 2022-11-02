@@ -265,18 +265,18 @@ services:
   #  command:
   #  - /opt/netbox/housekeeping.sh
   
-  netbox_postgres:
+  netbox-postgres:
     image: postgres:14-alpine
-    container_name: netbox_postgres
+    container_name: netbox-postgres
     env_file: ./netbox/env/postgres.env
     volumes:
     - ./netbox/netbox-postgres-data:/var/lib/postgresql/data
     networks:
             - net1
 
-  netbox_redis:
+  netbox-redis:
     image: redis:7-alpine
-    container_name: netbox_redis
+    container_name: netbox-redis
     command:
     - sh
     - -c # this is to evaluate the $REDIS_PASSWORD from the env
@@ -287,9 +287,9 @@ services:
     networks:
             - net1
   
-  netbox_redis-cache:
+  netbox-redis-cache:
     image: redis:7-alpine
-    container_name: netbox_redis-cache
+    container_name: netbox-redis-cache
     command:
     - sh
     - -c # this is to evaluate the $REDIS_PASSWORD from the env
