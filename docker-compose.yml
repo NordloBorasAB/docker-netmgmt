@@ -224,9 +224,9 @@ services:
     image: netboxcommunity/netbox:latest
     container_name: netbox
     depends_on:
-    - netbox_postgres
-    - netbox_redis
-    - netbox_redis-cache
+    - netbox-postgres
+    - netbox-redis
+    - netbox-redis-cache
     #- netbox-worker
     env_file: ./netbox/env/netbox.env
     environment:
