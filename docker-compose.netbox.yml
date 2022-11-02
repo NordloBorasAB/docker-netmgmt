@@ -204,7 +204,7 @@ services:
   portainer:
     image: portainer/portainer-ce:latest
     restart: unless-stopped
-    security_opt
+    security_opt:
       -  no-new-privileges:true
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
@@ -265,7 +265,7 @@ services:
   #  command:
   #  - /opt/netbox/housekeeping.sh
   
-  postgres:
+  netbox_postgres:
     image: postgres:14-alpine
     container_name: netbox_postgres
     env_file: ./netbox/env/postgres.env
@@ -274,7 +274,7 @@ services:
     networks:
             - net1
 
-  redis:
+  netbox_redis:
     image: redis:7-alpine
     container_name: netbox_redis
     command:
@@ -287,7 +287,7 @@ services:
     networks:
             - net1
   
-  redis-cache:
+  netbox_redis-cache:
     image: redis:7-alpine
     container_name: netbox_redis-cache
     command:
