@@ -22,8 +22,9 @@ Port80 svarar med redirect mot https (som inte är öppet) och du får giligt ce
 Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna IP.
 </p>
 
-<p>Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande
-- Plocka bort följande rader from "command" och "volumes" under treafik containern:
+<p>Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande: </p>
+
+<p>- Plocka bort följande rader from "command" och "volumes" under treafik containern:
        commands:
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" 
       - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" 
