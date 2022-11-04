@@ -24,7 +24,7 @@ Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna
 
 <p>Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande: </p>
 
-<p>- Plocka bort följande rader from "command" och "volumes" under treafik containern:
+<p>Plocka bort följande rader from "command" och "volumes" under treafik containern: </p>
        
 <p>   commands: </p>
 <p>      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" </p>
@@ -33,15 +33,14 @@ Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna
 <p>      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" </p>
 <p>       volumes: </p>
 <p>      - "./acme.json:/acme.json" </p>
-<p>- Aktivera följande rader: </p>
-       commands:
-      - "- "--providers.file.directory=/etc/traefik/dynamic"
-      - "- "--providers.file.watch=true"
-       volumes:
-      - "./traefik/:/etc/traefik/dynamic/:ro" 
-- Om du har en wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i respektive fil i /certs mappen.
-- Traefik kommer då att börja använda certifikatet i dessa mappar. Refresha och sen är det klart.
-</p>
+<p>Aktivera följande rader: </p>
+<p>   commands:</p>
+<p>      - "- "--providers.file.directory=/etc/traefik/dynamic"</p>
+<p>      - "- "--providers.file.watch=true"</p>
+<p>       volumes:</p>
+<p>      - "./traefik/:/etc/traefik/dynamic/:ro"</p> 
+<p>Om du har en wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i respektive fil i /certs mappen.</p>
+<p>Traefik kommer då att börja använda certifikatet i dessa mappar. Refresha och sen är det klart.</p>
 
 <br>
 <h3> Basic setup </h3>
