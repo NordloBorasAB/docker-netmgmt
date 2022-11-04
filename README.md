@@ -25,14 +25,15 @@ Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna
 <p>Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande: </p>
 
 <p>- Plocka bort följande rader from "command" och "volumes" under treafik containern:
-       commands:
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" 
-      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" 
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge" 
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" 
-       volumes:
-      - "./acme.json:/acme.json"
-- Aktivera följande rader:
+       
+<p>   commands: </p>
+<p>      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" </p>
+<p>      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" </p> 
+<p>      - "--certificatesresolvers.letsencrypt.acme.httpchallenge" </p>
+<p>      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" </p>
+<p>       volumes: </p>
+<p>      - "./acme.json:/acme.json" </p>
+<p>- Aktivera följande rader: </p>
        commands:
       - "- "--providers.file.directory=/etc/traefik/dynamic"
       - "- "--providers.file.watch=true"
