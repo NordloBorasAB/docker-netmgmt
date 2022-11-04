@@ -21,6 +21,26 @@ generera ett giltigt cert från LetsEncrypt. Annars används default inbyggda se
 Port80 svarar med redirect mot https (som inte är öppet) och du får giligt cert utan att faktiskt behöva publicera något.
 Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna IP.
 </p>
+
+<p>Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande
+- Plocka bort följande rader from "command" och "volumes" under treafik containern:
+       commands:
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" 
+      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" 
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge" 
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" 
+       volumes:
+      - "./acme.json:/acme.json"
+- Aktivera följande rader:
+       commands:
+      - "- "--providers.file.directory=/etc/traefik/dynamic"
+      - "- "--providers.file.watch=true"
+       volumes:
+      - "./traefik/:/etc/traefik/dynamic/:ro" 
+- Om du har en wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i respektive fil i /certs mappen.
+- Traefik kommer då att börja använda certifikatet i dessa mappar. Refresha och sen är det klart.
+</p>
+
 <br>
 <h3> Basic setup </h3>
 <p> Vid installation anpassa .env -filen samt config -filen </p>
