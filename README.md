@@ -14,7 +14,7 @@ Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot e
 generera ett giltigt cert från LetsEncrypt. Annars används default inbyggda self-signed cert.
 </p>
 
-<p> HA-Proxy är reverseproxy för all web kopplade till Netbox. redirectar http till https för de två namn som anges i .env -filen.
+<p> HA-Proxy är reverseproxy för all web kopplade till Netbox, den redirectar http till https för de två namn som anges i .env -filen.
 </p>
 
 <p> Lättast är att peka de 2 dns-namnen publikt mot brandvägg och NATa endast port80 mot docker-servern.
