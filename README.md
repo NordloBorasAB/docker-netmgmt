@@ -1,4 +1,4 @@
-<h1>Docker med IPAM, LibreNMS, Netbox, Pwpush, Oxidized och Portainer för network management</h1>
+<h1>Docker med IPAM, LibreNMS, Netbox, Pwpush, Oxidized, Syslog och Portainer för network management</h1>
 
 <p>Installera Docker:</p>
 
@@ -44,10 +44,10 @@ Aktivera följande rader from "command" och "volumes" under treafik containern</
      volumes:
       - "./traefik/:/etc/traefik/dynamic/:ro" 
 
-<p>- Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i /certs mappen</p>
-<p>OBS du måste döpa om .crt till .crt.key för att Traefik och HA-Proxy ska hitta certifikatet.</p>
+<p>Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i /certs mappen
+   OBS du måste döpa om .crt till .crt.key för att Traefik och HA-Proxy ska hitta certifikatet.</p>
 
-<p>Under /certs/config.yml behöver man justera certifikatsnamnet. Detta behövs även göras under haproxy/haproxy.cfg
+Under /certs/config.yml behöver man justera certifikatsnamnet. Detta behövs även göras under haproxy/haproxy.cfg
     
     /certs/config.yml:
        
@@ -61,7 +61,7 @@ Aktivera följande rader from "command" och "volumes" under treafik containern</
     frontend  main
     bind *:443 ssl crt /etc/ssl/certs/temp.crt <--
    
-<p>Traefik kommer då att börja använda certifikatet i dessa mappar. Uppdatera sida, och verifiera att cerftifikatet ser korrekt ut.</p>
+<p>Utför sedan en docker-compose dowb och sedan docker-comopse up, vänta 2 minuter. Uppdatera sida, och verifiera att cerftifikatet ser korrekt ut.</p>
 
 <br>
 <h3> Basic setup </h3>
