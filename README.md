@@ -22,23 +22,28 @@ Port80 svarar med redirect mot https (som inte är öppet) och du får giligt ce
 Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna IP.
 </p>
 
-<p>Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande: </p>
+## Wildcard certifikat
 
-<p>Plocka bort följande rader from "command" och "volumes" under treafik containern </p>
+Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande:
+
+Plocka bort följande rader from "command" och "volumes" under treafik containern:
        
-<p>   commands: </p>
-<p>      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" </p>
-<p>      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" </p> 
-<p>      - "--certificatesresolvers.letsencrypt.acme.httpchallenge" </p>
-<p>      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" </p>
-<p>       volumes: </p>
-<p>      - "./acme.json:/acme.json" </p>
-<p>Aktivera följande rader from "command" och "volumes" under treafik containern</p>
-<p>   commands:</p>
-<p>      - "--providers.file.directory=/etc/traefik/dynamic"</p>
-<p>      - "--providers.file.watch=true"</p>
-<p>       volumes:</p>
-<p>      - "./traefik/:/etc/traefik/dynamic/:ro"</p> 
+     commands:
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"  
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
+     volumes:
+      - "./acme.json:/acme.json"
+      
+Aktivera följande rader from "command" och "volumes" under treafik containern</p>
+
+     commands:
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+     volumes:
+     - "./traefik/:/etc/traefik/dynamic/:ro" 
+     
 <p>Om du har en wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i respektive fil i /certs mappen.</p>
 <p>Traefik kommer då att börja använda certifikatet i dessa mappar. Uppdatera sida, och verifiera att cerftifikatet ser korrekt ut.</p>
 
