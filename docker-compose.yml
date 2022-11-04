@@ -24,6 +24,8 @@ services:
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
       - "--serverstransport.insecureskipverify=true"
+      #- "- "--providers.file.directory=/etc/traefik/dynamic"
+      #- "- "--providers.file.watch=true"
 
     ports:
       - target: 80
@@ -33,6 +35,7 @@ services:
         published: 443
         protocol: tcp
     volumes:
+      #- "./traefik/:/etc/traefik/dynamic/:ro" 
       - "./acme.json:/acme.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
