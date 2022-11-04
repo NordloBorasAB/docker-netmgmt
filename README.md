@@ -33,7 +33,7 @@ Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna
 <p>      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" </p>
 <p>       volumes: </p>
 <p>      - "./acme.json:/acme.json" </p>
-<p>Aktivera följande rader: </p>
+<p>Akticera följande rader from "command" och "volumes" under treafik containern</p>
 <p>   commands:</p>
 <p>      - "--providers.file.directory=/etc/traefik/dynamic"</p>
 <p>      - "--providers.file.watch=true"</p>
