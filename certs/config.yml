@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /etc/traefik/dynamic/itpb.crt
+      keyFile: /etc/traefik/dynamic/itpb.key
