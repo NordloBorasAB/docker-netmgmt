@@ -39,6 +39,18 @@ services:
            - net1
     restart: unless-stopped
 
+#Tthis is the proxy for Netbox
+
+  ha:
+    image: haproxytech/haproxy-ubuntu:latest
+    ports:
+      - 8080:80
+    volumes:
+      - "./haproxy:/usr/local/etc/haproxy:ro"
+    networks:
+      - net1
+    restart: always
+
   db:
     image: mariadb:10.5
     container_name: librenms_db
@@ -188,18 +200,18 @@ services:
             - net1
     restart: unless-stopped
 
-  #oxidized:
-  #  restart: unless-stopped
-  #  image: oxidized/oxidized:latest
-  #  environment:
-  #    CONFIG_RELOAD_INTERVAL: 600
-  #  volumes:
-  #    - ./oxidized:/root/.config/oxidized
-  #  #command removes pid-file if it exsist on boot. prevents fail on boot
-  #  command: bash -c 'rm /root/.config/oxidized/pid; /sbin/my_init'
-  #  networks:
-  #         net1:
-  #            ipv4_address: ${OXIDIP}
+#  oxidized:
+#    restart: unless-stopped
+#    image: oxidized/oxidized:latest
+#    environment:
+#      CONFIG_RELOAD_INTERVAL: 600
+#    volumes:
+#      - ./oxidized:/root/.config/oxidized
+#    #command removes pid-file if it exists on boot. Prevents fail on boot.
+#    command: bash -c 'rm /root/.config/oxidized/pid; /sbin/my_init'
+#    networks:
+#           net1:
+#              ipv4_address: ${OXIDIP}
 
   portainer:
     image: portainer/portainer-ce:latest
@@ -214,12 +226,15 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.entrypoints=https"
       - "traefik.http.routers.portainer.rule=Host(`${PORTAINERDOMAIN}`)"
-      #- "traefik.http.services.portainer.loadbalancer.server.scheme=https"
+      - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
       - "traefik.http.services.portainer.loadbalancer.server.port=9443"
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.routers.portainer.tls.domains[0].main=${PORTAINERDOMAIN}"
     networks:
             - net1
+  
+  #Netbox is accessed through the HA-Proxy
+
   netbox:
     image: netboxcommunity/netbox:latest
     container_name: netbox
@@ -233,21 +248,14 @@ services:
       SKIP_STARTUP_SCRIPTS: ${SKIP_STARTUP_SCRIPTS-false}
     user: 'unit:root'
     volumes:
-    - ./netbox/configuration:/etc/netbox/config:z,ro
-    - ./netbox/reports:/etc/netbox/reports:z,ro
-    - ./netbox/scripts:/etc/netbox/scripts:z,ro
-    - ./netbox/netbox-media-files:/opt/netbox/netbox/media:z
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.netbox.entrypoints=https"
-      - "traefik.http.routers.netbox.rule=Host(`${NETBOXDOMAIN}`)"
-      #- "traefik.http.services.netbox.loadbalancer.server.scheme=https"
-      - "traefik.http.services.netbox.loadbalancer.server.port=8000"
-      - "traefik.http.routers.netbox.tls=true"
-      - "traefik.http.routers.netbox.tls.domains[0].main=${NETBOXDOMAIN}"
+      - ./netbox/configuration:/etc/netbox/config:z,ro
+      - ./netbox/reports:/etc/netbox/reports:z,ro
+      - ./netbox/scripts:/etc/netbox/scripts:z,ro
+      - ./netbox/netbox-media-files:/opt/netbox/netbox/media:z
     networks:
-            - net1
-            
+           net1:
+            ipv4_address: ${NETBOXIP}
+
   #netbox-worker:
   #  <<: *netbox
   #  depends_on:
@@ -264,13 +272,13 @@ services:
   #  - postgres
   #  command:
   #  - /opt/netbox/housekeeping.sh
-  
+
   netbox-postgres:
     image: postgres:14-alpine
     container_name: netbox-postgres
     env_file: ./netbox/env/postgres.env
     volumes:
-    - ./netbox/netbox-postgres-data:/var/lib/postgresql/data
+      - ./netbox/netbox-postgres-data:/var/lib/postgresql/data
     networks:
             - net1
 
@@ -278,29 +286,30 @@ services:
     image: redis:7-alpine
     container_name: netbox-redis
     command:
-    - sh
-    - -c # this is to evaluate the $REDIS_PASSWORD from the env
-    - redis-server --appendonly yes --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
+      - sh
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - redis-server --appendonly yes --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
     env_file: ./netbox/env/redis.env
     volumes:
-    - ./netbox/netbox-redis-data:/data
+      - ./netbox/netbox-redis-data:/data
     networks:
             - net1
-  
+
   netbox-redis-cache:
     image: redis:7-alpine
     container_name: netbox-redis-cache
     command:
-    - sh
-    - -c # this is to evaluate the $REDIS_PASSWORD from the env
-    - redis-server --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
+      - sh
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - redis-server --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
     env_file: ./netbox/env/redis-cache.env
     volumes:
-    - ./netbox/netbox-redis-cache-data:/data
+      - ./netbox/netbox-redis-cache-data:/data
     networks:
-            - net1  
+            - net1
+  
   pwpush:
-    image: pglombardo/pwpush-ephemeral:latest
+    image: pglombardo/pwpush-ephemeral:1.17.12
     hostname: pwpush
     container_name: pwpush
     environment:
@@ -313,7 +322,7 @@ services:
       - "traefik.http.routers.pwpush.entrypoints=https"
       - "traefik.http.routers.pwpush.rule=Host(`${PWPUSHDOMAIN}`)"
       - "traefik.http.routers.pwpush.tls=true"
-      - "traefik.http.routers.netbox.tls.domains[0].main=${PWPUSHDOMAIN}"
+      - "traefik.http.routers.pwpush.tls.domains[0].main=${PWPUSHDOMAIN}"
       - "traefik.http.services.pwpush.loadbalancer.server.port=5100"
     networks:
       - net1
