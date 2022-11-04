@@ -15,11 +15,11 @@ services:
       - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.https=true"
       - "--entrypoints.https.address=:443"
-      - "--certificatesresolvers.letsencrypt"
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
+      - "--certificatesresolvers.letsencrypt" 
+      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" 
+      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" 
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge" 
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" 
       - "--providers.docker"
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
@@ -42,7 +42,7 @@ services:
            - net1
     restart: unless-stopped
 
-#Tthis is the proxy for Netbox
+#This is the proxy for Netbox
 
   ha:
     image: haproxytech/haproxy-ubuntu:latest
