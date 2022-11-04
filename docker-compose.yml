@@ -246,8 +246,7 @@ services:
     - netbox-redis
     - netbox-redis-cache
     #- netbox-worker
-    #env_file: ./netbox/env/netbox.env
-    env_file: .env
+    env_file: ./netbox/env/netbox.env
     environment:
       SKIP_STARTUP_SCRIPTS: ${SKIP_STARTUP_SCRIPTS-false}
     user: 'unit:root'
@@ -280,8 +279,7 @@ services:
   netbox-postgres:
     image: postgres:14-alpine
     container_name: netbox-postgres
-    #env_file: ./netbox/env/postgres.env
-    env_file: .env
+    env_file: ./netbox/env/postgres.env
     volumes:
       - ./netbox/netbox-postgres-data:/var/lib/postgresql/data
     networks:
@@ -294,8 +292,7 @@ services:
       - sh
       - -c # this is to evaluate the $REDIS_PASSWORD from the env
       - redis-server --appendonly yes --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
-    #env_file: ./netbox/env/redis.env
-    env_file: .env
+    env_file: ./netbox/env/redis.env
     volumes:
       - ./netbox/netbox-redis-data:/data
     networks:
