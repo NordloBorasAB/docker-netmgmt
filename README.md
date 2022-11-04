@@ -1,17 +1,20 @@
-<h1>Docker med IPAM, LibreNMS, Oxidized och Portainer för network management</h1>
+<h1>Docker med IPAM, LibreNMS, Netbox, Pwpush, Oxidized och Portainer för network management</h1>
 
 <p>Installera Docker:</p>
 
 <code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
 <code>$ sudo sh get-docker.sh</code>
 
-<p> Bygger på officiella dockerimages för phpIPAM, librenms och Oxidized. 
+<p> Bygger på officiella dockerimages för phpIPAM, librenms, Netbox, Pwpush, Portainer och Oxidized. 
 Satt fasta versioner för att slippa buggar vid installation. Nya versioner kommer testas och då uppdateras docker-compose.yml
 </p>
 
 <p> traefik är reverseproxy för all web. redirectar http till https för de två namn som anges i .env -filen.
 Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port80 kommer ett traefik
 generera ett giltigt cert från LetsEncrypt. Annars används default inbyggda self-signed cert.
+</p>
+
+<p> HA-Proxy är reverseproxy för all web kopplade till Netbox. redirectar http till https för de två namn som anges i .env -filen.
 </p>
 
 <p> Lättast är att peka de 2 dns-namnen publikt mot brandvägg och NATa endast port80 mot docker-servern.
