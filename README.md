@@ -24,7 +24,7 @@ Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna
 
 ## Wildcard certifikat
 
-Om du önskar att använda ett lokalt wildcard certifikat behöver du göra följande:
+Om du önskar att använda ett lokalt wildcard certifikat för Traefik behöver du göra följande:
 
 Plocka bort följande rader from "command" och "volumes" under treafik containern:
        
@@ -43,8 +43,9 @@ Aktivera följande rader from "command" och "volumes" under treafik containern</
       - "--providers.file.watch=true"
      volumes:
      - "./traefik/:/etc/traefik/dynamic/:ro" 
-     
-<p>Om du har en wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i respektive fil i /certs mappen.</p>
+
+<p>Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i /certs mappen</p>
+<p>OBS du måste döpa om .crt till .crt.key för att Traefik och HA-Proxy ska hitta certifikatet.</p>
 <p>Traefik kommer då att börja använda certifikatet i dessa mappar. Uppdatera sida, och verifiera att cerftifikatet ser korrekt ut.</p>
 
 <br>
