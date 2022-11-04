@@ -305,7 +305,7 @@ services:
       - sh
       - -c # this is to evaluate the $REDIS_PASSWORD from the env
       - redis-server --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
-    #env_file: ./netbox/env/redis-cache.env
+    env_file: ./netbox/env/redis-cache.env
     volumes:
       - ./netbox/netbox-redis-cache-data:/data
     networks:
