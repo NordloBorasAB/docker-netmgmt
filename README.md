@@ -26,7 +26,7 @@ Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna
 
 Om du önskar att använda ett lokalt wildcard certifikat för Traefik behöver du göra följande:
 
-Plocka bort följande rader from "command" och "volumes" under treafik containern:
+Plocka bort följande rader from "command" och "volumes" under treafik containern
        
      commands:
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
@@ -42,10 +42,25 @@ Aktivera följande rader from "command" och "volumes" under treafik containern</
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--providers.file.watch=true"
      volumes:
-     - "./traefik/:/etc/traefik/dynamic/:ro" 
+      - "./traefik/:/etc/traefik/dynamic/:ro" 
 
-<p>Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i /certs mappen</p>
+<p>- Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i /certs mappen</p>
 <p>OBS du måste döpa om .crt till .crt.key för att Traefik och HA-Proxy ska hitta certifikatet.</p>
+
+<p>Under /certs/config.yml behöver man justera certifikatsnamnet. Detta behövs även göras under haproxy/haproxy.cfg
+    
+    /certs/config.yml:
+       
+    tls:
+    certificates:
+    - certFile: /etc/traefik/dynamic/itpb.crt <--
+      keyFile: /etc/traefik/dynamic/itpb.key <--
+    
+    /haproxy/haproxy.cfg:
+       
+    frontend  main
+    bind *:443 ssl crt /etc/ssl/certs/temp.crt <--
+   
 <p>Traefik kommer då att börja använda certifikatet i dessa mappar. Uppdatera sida, och verifiera att cerftifikatet ser korrekt ut.</p>
 
 <br>
