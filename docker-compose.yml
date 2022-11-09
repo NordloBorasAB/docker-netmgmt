@@ -35,7 +35,7 @@ services:
         published: 443
         protocol: tcp
     volumes:
-      #- "./traefik/:/etc/traefik/dynamic/:ro" 
+      - "./certs/:/etc/traefik/dynamic/:ro" 
       - "./acme.json:/acme.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
@@ -47,7 +47,7 @@ services:
   ha:
     image: haproxytech/haproxy-ubuntu:latest
     ports:
-      - 8080:80
+      - 8080:443
     volumes:
       - "./haproxy:/usr/local/etc/haproxy:ro"
     networks:
