@@ -24,8 +24,8 @@ services:
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
       - "--serverstransport.insecureskipverify=true"
-      #- "- "--providers.file.directory=/etc/traefik/dynamic"
-      #- "- "--providers.file.watch=true"
+      #- "--providers.file.directory=/etc/traefik/dynamic"
+      #- "--providers.file.watch=true"
 
     ports:
       - target: 80
