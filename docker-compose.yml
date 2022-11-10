@@ -46,6 +46,7 @@ services:
 
   ha:
     image: haproxytech/haproxy-ubuntu:latest
+    container_name: haproxy
     ports:
       - 8080:443
     volumes:
