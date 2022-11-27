@@ -42,19 +42,6 @@ services:
            - net1
     restart: unless-stopped
 
-#This is the proxy for Netbox
-
-  ha:
-    image: haproxytech/haproxy-ubuntu:latest
-    container_name: haproxy
-    ports:
-      - 8080:443
-    volumes:
-      - "./haproxy:/usr/local/etc/haproxy:ro"
-    networks:
-      - net1
-    restart: always
-
   db:
     image: mariadb:10.5
     container_name: librenms_db
@@ -110,7 +97,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:22.6.0
+    image: librenms/librenms:22.11.0
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -144,7 +131,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:22.6.0
+    image: librenms/librenms:22.11.0
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -173,7 +160,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:22.6.0
+    image: librenms/librenms:22.11.0
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -237,8 +224,6 @@ services:
     networks:
             - net1
   
-  #Netbox is accessed through the HA-Proxy
-
   netbox:
     image: netboxcommunity/netbox:latest
     container_name: netbox
@@ -251,6 +236,13 @@ services:
     environment:
       SKIP_STARTUP_SCRIPTS: ${SKIP_STARTUP_SCRIPTS-false}
     user: 'unit:root'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.netbox.entrypoints=https"
+      - "traefik.http.routers.netbox.rule=Host(`${NETBOXDOMAIN}`)"
+      - "traefik.http.routers.netbox.tls=true"
+      - "traefik.http.routers.netbox.tls.domains[0].main=${NETBOXDOMAIN}"
+      - "traefik.http.services.netbox.loadbalancer.server.port=80"
     volumes:
       - ./netbox/configuration:/etc/netbox/config:z,ro
       - ./netbox/reports:/etc/netbox/reports:z,ro
@@ -313,7 +305,7 @@ services:
             - net1
   
   pwpush:
-    image: pglombardo/pwpush-ephemeral:1.17.12
+    image: pglombardo/pwpush-ephemeral:latest
     hostname: pwpush
     container_name: pwpush
     environment:
@@ -321,6 +313,8 @@ services:
       EXPIRE_AFTER_DAYS_DEFAULT: '1'
       EXPIRE_AFTER_VIEWS_DEFAULT: '1'
       RETRIEVAL_STEP_DEFAULT: 'true'
+      PWP__BRAND__SHOW_FOOTER_MENU: 'false'
+      PWP__BRAND__TITLE: 'Password Pusher'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.pwpush.entrypoints=https"
