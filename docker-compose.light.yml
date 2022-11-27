@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 	
   pwpush:
-    image: pglombardo/pwpush-ephemeral:1.17.12
+    image: pglombardo/pwpush-ephemeral:latest
     hostname: pwpush
     container_name: pwpush
     environment:
