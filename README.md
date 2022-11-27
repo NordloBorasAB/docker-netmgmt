@@ -1,32 +1,24 @@
-<h1>Docker med IPAM, LibreNMS, Netbox, Pwpush, Oxidized, Syslog och Portainer för network management</h1>
+<h1>Docker med IPAM, LibreNMS, Netbox, PwPush, Oxidized, Syslog och Portainer för network management</h1>
 
 <p>Installera Docker:</p>
 
 <code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
-<code>$ sudo sh get-docker.sh</code>
+<code>sudo sh get-docker.sh</code>
 
-<p> Bygger på officiella dockerimages för phpIPAM, librenms, Netbox, Pwpush, Portainer och Oxidized. 
-Satt fasta versioner för att slippa buggar vid installation. Nya versioner kommer testas och då uppdateras docker-compose.yml
+<p>Uppsättningen bygger på officiella dockerimages för phpIPAM, LibreNMS, Netbox, PwPush, Portainer och Oxidized. Fasta versioner är angivna i docker-compose.yml för att slippa buggar vid installation. Nya versioner kommer testas och då uppdateras docker-compose.yml
 </p>
 
-<p> traefik är reverseproxy för all web. redirectar http till https för de två namn som anges i .env -filen.
-Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port80 kommer ett traefik
-generera ett giltigt cert från LetsEncrypt. Annars används default inbyggda self-signed cert.
+<p>Traefik är reverse proxy för all web. Den redirectar http till https för de hostnames som anges i .env -filen. Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port 80 kommer Traefik generera ett giltigt cert från LetsEncrypt. Annars används Traefiks inbyggda self-signed certifikat.
 </p>
 
-<p> HA-Proxy är reverseproxy för all web kopplade till Netbox, den redirectar http till https för de två namn som anges i .env -filen.
-</p>
-
-<p> Lättast är att peka de 2 dns-namnen publikt mot brandvägg och NATa endast port80 mot docker-servern.
-Port80 svarar med redirect mot https (som inte är öppet) och du får giligt cert utan att faktiskt behöva publicera något.
-Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna IP.
+<p>Lättast är att peka de 2 dns-namnen publikt mot brandvägg och konfigurera DNAT på port 80 mot docker-servern. Port 80 svarar med redirect mot https (som inte är öppet) och du får giligt cert utan att faktiskt behöva publicera något. Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna ip-adress.
 </p>
 
 ## Wildcard certifikat
 
-Om du önskar att använda ett lokalt wildcard certifikat för Traefik behöver du göra följande:
+Om du vill använda ett lokalt wildcard certifikat för Traefik behöver du göra följande:
 
-Plocka bort följande rader from "command" och "volumes" under treafik containern
+Plocka bort följande rader från "command" och "volumes" under Traefik-containerns konfiguration:
        
      commands:
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
@@ -36,7 +28,7 @@ Plocka bort följande rader from "command" och "volumes" under treafik container
      volumes:
       - "./acme.json:/acme.json"
       
-Aktivera följande rader from "command" och "volumes" under treafik containern</p>
+Aktivera följande rader från "command" och "volumes" under Traefik-containern:</p>
 
      commands:
       - "--providers.file.directory=/etc/traefik/dynamic"
@@ -44,24 +36,23 @@ Aktivera följande rader from "command" och "volumes" under treafik containern</
      volumes:
       - "./traefik/:/etc/traefik/dynamic/:ro" 
 
-<p>Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistar in .crt och .key i /certs mappen
-   OBS du måste döpa om .crt till .crt.key för att Traefik och HA-Proxy ska hitta certifikatet.</p>
+<p>Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistra in .crt och .key i mappen som heter "certs".</p>
 
-Under /certs/config.yml behöver man justera certifikatsnamnet. Detta behövs även göras under haproxy/haproxy.cfg
+Under "/certs/config.yml" behöver man justera certifikatsnamnet.
     
     /certs/config.yml:
        
     tls:
     certificates:
-    - certFile: /etc/traefik/dynamic/itpb.crt <--
-      keyFile: /etc/traefik/dynamic/itpb.key <--
+    - certFile: /etc/traefik/dynamic/temp.crt <--
+      keyFile: /etc/traefik/dynamic/temp.key <--
     
     /haproxy/haproxy.cfg:
        
     frontend  main
     bind *:443 ssl crt /etc/ssl/certs/temp.crt <--
    
-<p>Utför sedan en docker-compose dowb och sedan docker-comopse up, vänta 2 minuter. Uppdatera sida, och verifiera att cerftifikatet ser korrekt ut.</p>
+<p>Utför sedan en "docker-compose down" och sedan "docker-comopse up" och vänta ett par minuter. Uppdatera sedan sidan och verifiera att certifikatet ser korrekt ut</p>
 
 <br>
 <h3> Basic setup </h3>
