@@ -94,7 +94,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:22.6.0
+    image: librenms/librenms:22.11.0
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -128,7 +128,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:22.6.0
+    image: librenms/librenms:22.11.0
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -157,7 +157,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:22.6.0
+    image: librenms/librenms:22.11.0
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
