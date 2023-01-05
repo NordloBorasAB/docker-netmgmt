@@ -4,6 +4,7 @@
 
 <code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
 <code>sudo sh get-docker.sh</code>
+<code>sudo apt install docker-compose</code>
 
 <p>Uppsättningen bygger på officiella dockerimages för phpIPAM, LibreNMS, Netbox, PwPush, Portainer och Oxidized. Fasta versioner är angivna i docker-compose.yml för att slippa buggar vid installation. Nya versioner kommer testas och då uppdateras docker-compose.yml
 </p>
