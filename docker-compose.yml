@@ -242,7 +242,7 @@ services:
       - "traefik.http.routers.netbox.rule=Host(`${NETBOXDOMAIN}`)"
       - "traefik.http.routers.netbox.tls=true"
       - "traefik.http.routers.netbox.tls.domains[0].main=${NETBOXDOMAIN}"
-      - "traefik.http.services.netbox.loadbalancer.server.port=80"
+      - "traefik.http.services.netbox.loadbalancer.server.port=8080"
     volumes:
       - ./netbox/configuration:/etc/netbox/config:z,ro
       - ./netbox/reports:/etc/netbox/reports:z,ro
