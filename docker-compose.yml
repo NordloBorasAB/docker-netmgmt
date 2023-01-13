@@ -15,17 +15,17 @@ services:
       - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.https=true"
       - "--entrypoints.https.address=:443"
-      - "--certificatesresolvers.letsencrypt" 
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json" 
-      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" 
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge" 
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" 
+      #- "--certificatesresolvers.letsencrypt" 
+      #- "--certificatesresolvers.letsencrypt.acme.storage=acme.json" 
+      #- "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}" 
+      #- "--certificatesresolvers.letsencrypt.acme.httpchallenge" 
+      #- "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http" 
       - "--providers.docker"
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
       - "--serverstransport.insecureskipverify=true"
-      #- "--providers.file.directory=/etc/traefik/dynamic"
-      #- "--providers.file.watch=true"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
 
     ports:
       - target: 80
@@ -36,7 +36,7 @@ services:
         protocol: tcp
     volumes:
       - "./certs/:/etc/traefik/dynamic/:ro" 
-      - "./acme.json:/acme.json"
+      #- "./acme.json:/acme.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
            - net1
@@ -325,6 +325,58 @@ services:
     networks:
       - net1
     restart: always
+    
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+      - PASSWORD=Vinterkatt23
+     # - CUSTOM_RESULTS=false #optional
+     # - DB_TYPE=sqlite #optional
+     # - DB_NAME=DB_NAME #optional
+     # - DB_HOSTNAME=DB_HOSTNAME #optional
+     # - DB_USERNAME=DB_USERNAME #optional
+     # - DB_PASSWORD=DB_PASSWORD #optional
+     # - DB_PORT=DB_PORT #optional
+    volumes:
+       - ./librespeed/config:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.speedtest.entrypoints=https"
+      - "traefik.http.routers.speedtest.rule=Host(`${SPEEDTESTDOMAIN}`)"
+      - "traefik.http.routers.speedtest.tls=true"
+      - "traefik.http.routers.speedtest.tls.domains[0].main=${SPEEDTESTDOMAIN}"
+      - "traefik.http.services.speedtest.loadbalancer.server.port=80"
+    networks:
+      - net1
+    restart: unless-stopped
+    
+  smokeping:
+    image: lscr.io/linuxserver/smokeping:latest
+    container_name: smokeping
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    dns:
+      - 1.1.1.1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.smokeping.entrypoints=https"
+      - "traefik.http.routers.smokeping.rule=Host(`${SMOKEDOMAIN}`)"
+      - "traefik.http.routers.smokeping.tls=true"
+      - "traefik.http.routers.smokeping.tls.domains[0].main=${SMOKEDOMAIN}"
+      - "traefik.http.services.smokeping.loadbalancer.server.port=80"
+    volumes:
+      - ./smokeping/data:/data:rw
+      - ./smokeping/config:/config:ro
+    networks:
+      - net1
+         # ipv4_address: ${SMOKEIP}
+    restart: unless-stopped
 
 networks:
         net1:
