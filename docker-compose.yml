@@ -251,6 +251,7 @@ services:
     networks:
            net1:
             ipv4_address: ${NETBOXIP}
+    restart: unless-stopped
 
   #netbox-worker:
   #  <<: *netbox
@@ -290,6 +291,7 @@ services:
       - ./netbox/netbox-redis-data:/data
     networks:
             - net1
+    restart: unless-stopped
 
   netbox-redis-cache:
     image: redis:7-alpine
@@ -303,7 +305,8 @@ services:
       - ./netbox/netbox-redis-cache-data:/data
     networks:
             - net1
-  
+    restart: unless-stopped
+
   pwpush:
     image: pglombardo/pwpush-ephemeral:latest
     hostname: pwpush
