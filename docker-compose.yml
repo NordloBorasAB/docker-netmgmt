@@ -278,6 +278,7 @@ services:
       - ./netbox/netbox-postgres-data:/var/lib/postgresql/data
     networks:
             - net1
+    restart: unless-stopped
 
   netbox-redis:
     image: redis:7-alpine
