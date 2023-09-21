@@ -1,15 +1,14 @@
-<h1>Docker med IPAM, LibreNMS, Netbox, PwPush, Oxidized, Syslog och Portainer för network management</h1>
+<h1>Docker setup with IPAM, LibreNMS, Netbox, PwPush, Oxidized, Syslog and Portainer for network monitoring, management and documentation</h1>
 
-<p>Installera Docker:</p>
+<p>Install Docker:</p>
 
 <code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
 <code>sudo sh get-docker.sh</code><br>
 <code>sudo apt install docker-compose</code>
 
-<p>Uppsättningen bygger på officiella dockerimages för phpIPAM, LibreNMS, Netbox, PwPush, Portainer och Oxidized. Fasta versioner är angivna i docker-compose.yml för att slippa buggar vid installation. Nya versioner kommer testas och då uppdateras docker-compose.yml
-</p>
+<p>This docker compose is based on dockerimages for phpIPAM, LibreNMS, Netbox, PwPush, Portainer, Oxidized and others. Hard coded versions are defined in docker-compose.yml to avoid new bugs at deployment. New versions are tested evaluated regularly and this docker compose is updated sporadically with approved versions numbers.</p>
 
-<p>Traefik är reverse proxy för all web. Den redirectar http till https för de hostnames som anges i .env -filen. Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port 80 kommer Traefik generera ett giltigt cert från LetsEncrypt. Annars används Traefiks inbyggda self-signed certifikat.
+<p>Traefik is used as a reverse proxy and TLS endpoint for all ingress traffic. Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port 80 kommer Traefik generera ett giltigt cert från LetsEncrypt. Annars används Traefiks inbyggda self-signed certifikat.
 </p>
 
 <p>Lättast är att peka de 2 dns-namnen publikt mot brandvägg och konfigurera DNAT på port 80 mot docker-servern. Port 80 svarar med redirect mot https (som inte är öppet) och du får giligt cert utan att faktiskt behöva publicera något. Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna ip-adress.
