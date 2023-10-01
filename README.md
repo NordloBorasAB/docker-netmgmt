@@ -14,11 +14,11 @@
 <p>The easiest solution is to point the dns names to a public address on the firewall and configure dnat on port 80 towards the Docker host. Port 80 will reply with a redirect to https which is closed but you will still get valid certs without publishing any services. Add the DNS records to a private DNS and access your services with a valid certificate.
 </p>
 
-## Wildcard certifikat
+## Wildcard certificates
 
-Om du vill använda ett lokalt wildcard certifikat för Traefik behöver du göra följande:
+To use purchased wildcard certificates do the following:
 
-Plocka bort följande rader från "command" och "volumes" under Traefik-containerns konfiguration:
+Remove these lines under "command" and "volumes" for the Traefik container:
        
      commands:
       - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
@@ -28,7 +28,7 @@ Plocka bort följande rader från "command" och "volumes" under Traefik-containe
      volumes:
       - "./acme.json:/acme.json"
       
-Aktivera följande rader från "command" och "volumes" under Traefik-containern:</p>
+Uncomment these lines under "command" and "volumes" for the Traefik container:</p>
 
      commands:
       - "--providers.file.directory=/etc/traefik/dynamic"
@@ -36,9 +36,9 @@ Aktivera följande rader från "command" och "volumes" under Traefik-containern:
      volumes:
       - "./traefik/:/etc/traefik/dynamic/:ro" 
 
-<p>Om du har ett wildcard.pfx tillgänglig kan du bryta den med openssl och klistra in .crt och .key i mappen som heter "certs".</p>
+<p>If you have a pfx file with your wildcard certificate available export .crt and .key with OpenSSL and put them in the "certs" folder.</p>
 
-Under "/certs/config.yml" behöver man justera certifikatsnamnet.
+Adjust the certificate and key name in "/certs/config.yml".
     
     /certs/config.yml:
        
@@ -52,7 +52,7 @@ Under "/certs/config.yml" behöver man justera certifikatsnamnet.
     frontend  main
     bind *:443 ssl crt /etc/ssl/certs/temp.crt <--
    
-<p>Utför sedan en "docker-compose down" och sedan "docker-comopse up" och vänta ett par minuter. Uppdatera sedan sidan och verifiera att certifikatet ser korrekt ut</p>
+<p>Perform a "docker-compose down" and sedan "docker-compose up" and wait a couple of minutes. Refresh the site and verify the proper function of the certificate.</p>
 
 <br>
 <h3> Basic setup </h3>
