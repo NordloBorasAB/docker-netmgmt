@@ -57,8 +57,8 @@ http:
 url: http://172.23.240.22  <-
 </p>
 <p>After creating public DNS records, create acme.json and set permissions:
-<br>touch acme.json
-<br>chmod 600 acme.json
+<br><code>touch acme.json</code>
+<br><code>chmod 600 acme.json</code>
 <p>After editing the .env file start the containers by running: <BR>
 <code>docker-compose up -d</code></p>
 <p>While waiting for docker-compose to do its thing create DNS records in your internal DNS for the containers you have chosen to deploy.</p>
