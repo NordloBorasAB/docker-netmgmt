@@ -47,25 +47,21 @@ Adjust the certificate and key name in "/certs/config.yml".
     - certFile: /etc/traefik/dynamic/temp.crt <--
       keyFile: /etc/traefik/dynamic/temp.key <--
       
-<p>Perform a "docker-compose down" and sedan "docker-compose up" and wait a couple of minutes. Refresh the site and verify the proper function of the certificate.</p>
+<p>Perform a "docker-compose down" and "docker-compose up" and wait a couple of minutes. Refresh the site and verify the proper function of the certificate.</p>
 
 <br>
-<h3> Basic setup </h3>
-<p> Vid installation anpassa .env -filen samt config -filen </p>
-<p>.env -filen innehåller ett ip-scope. Ändras detta måste config -filen för oxidized uppdateras manuellt på:
+<h3>Basic setup</h3>
+<p>Adjust the .env and config file before running docker-compose</p>
+<p>The .env file specifies a subnet for the private Docker network. If you change this the config file for Oxidized must be updated:
 http:
 url: http://172.23.240.22  <-
 </p>
-<p> Efter att du skapat publika DNS-namn (om du vill ha giltigt LetsEncrypt cert) skapa acme.json och sätt korrekt rättighet:
-<br> touch acme.json
-<br> chmod 600 acme.json
-<p> Efter du redigera .env starta upp docker containers med: <BR>
+<p>After creating public DNS records, create acme.json and set permissions:
+<br>touch acme.json
+<br>chmod 600 acme.json
+<p>After editing the .env file start the containers by running: <BR>
 docker-compose up -d
-<p> Medans du väntar på att docker-compose gör sitt jobb skapa DNS-entrys i interna DNSen mot serverns interna-ip för de 2 dns-namnen.</p>
-<p> Det tar ca 15min för librenms databas att bli helt färdig så ha tålamod. 
-När librenms är uppe logga på med default lösenord och skapa API access för oxidized kopiera in token i config -filen 
-</p>
-<p> Lägg till username och password för switcharna i config -filen och kopiera sedan in den i oxidized mappen. (ersätt befintlig).
-</p>
-<p> Resten sköts ifrån webGUIt. Sätt användarnamn och lösen för librenms och phpIPAM och initiera phpIPAM databasen
-</p>
+<p>While waiting for docker-compose to do its thing create DNS records in your internal DNS for the containers you have chosen to deploy.</p>
+<p>When LibreNMS is ready log on with the default password and configure API access for oxidized, copy the API token to Oxidized's config file.</p>
+<p>Add username and password for the switches in the config file and copy the file to the oxidized folder to replace the current file.</p>
+<p>The remaining config is performed from the web gui of each application.</p>
