@@ -46,12 +46,7 @@ Adjust the certificate and key name in "/certs/config.yml".
     certificates:
     - certFile: /etc/traefik/dynamic/temp.crt <--
       keyFile: /etc/traefik/dynamic/temp.key <--
-    
-    /haproxy/haproxy.cfg:
-       
-    frontend  main
-    bind *:443 ssl crt /etc/ssl/certs/temp.crt <--
-   
+      
 <p>Perform a "docker-compose down" and sedan "docker-compose up" and wait a couple of minutes. Refresh the site and verify the proper function of the certificate.</p>
 
 <br>
