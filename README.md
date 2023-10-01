@@ -60,7 +60,7 @@ url: http://172.23.240.22  <-
 <br>touch acme.json
 <br>chmod 600 acme.json
 <p>After editing the .env file start the containers by running: <BR>
-<code></code>docker-compose up -d</p>code>
+<code>docker-compose up -d</code></p>
 <p>While waiting for docker-compose to do its thing create DNS records in your internal DNS for the containers you have chosen to deploy.</p>
 <p>When LibreNMS is ready log on with the default password and configure API access for oxidized, copy the API token to Oxidized's config file.</p>
 <p>Add username and password for the switches in the config file and copy the file to the oxidized folder to replace the current file.</p>
