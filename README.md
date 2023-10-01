@@ -8,10 +8,10 @@
 
 <p>This docker compose is based on dockerimages for phpIPAM, LibreNMS, Netbox, PwPush, Portainer, Oxidized and others. Hard coded versions are defined in docker-compose.yml to avoid new bugs at deployment. New versions are tested evaluated regularly and this docker compose is updated sporadically with approved versions numbers.</p>
 
-<p>Traefik is used as a reverse proxy and TLS endpoint for all ingress traffic. Anger man en giltig domän + email-adress och leder dessa dns-namn publikt mot en ip som svarar på port 80 kommer Traefik generera ett giltigt cert från LetsEncrypt. Annars används Traefiks inbyggda self-signed certifikat.
+<p>Traefik is used as a reverse proxy and TLS endpoint for all ingress traffic. If a valid domain and email address is provided and you point public dns names towards a web server on port 80 Traefik will generate a valid Letsencrypt certificate. If else Traefiks self signed certificate will be used.
 </p>
 
-<p>Lättast är att peka de 2 dns-namnen publikt mot brandvägg och konfigurera DNAT på port 80 mot docker-servern. Port 80 svarar med redirect mot https (som inte är öppet) och du får giligt cert utan att faktiskt behöva publicera något. Lägg sedan upp samma namn i en intern DNS-server som pekar på serverns interna ip-adress.
+<p>The easiest solution is to point the dns names to a public address on the firewall and configure dnat on port 80 towards the Docker host. Port 80 will reply with a redirect to https which is closed but you will still get valid certs without publishing any services. Add the DNS records to a private DNS and access your services with a valid certificate.
 </p>
 
 ## Wildcard certifikat
