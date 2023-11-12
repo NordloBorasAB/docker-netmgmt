@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   traefik:
-    image: traefik:2.7
+    image: traefik:2.10.5
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: mariadb:10.5
+    image: mariadb:10.8
     container_name: librenms_db
     command:
       - "mysqld"
@@ -74,7 +74,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:7.2.3
     container_name: librenms_redis
     environment:
       - "TZ=${TZ}"
@@ -97,7 +97,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:22.11.0
+    image: librenms/librenms:23.9.1
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -131,7 +131,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:22.11.0
+    image: librenms/librenms:23.9.1
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -160,7 +160,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:22.11.0
+    image: librenms/librenms:23.9.1
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -197,9 +197,9 @@ services:
 #    environment:
 #      CONFIG_RELOAD_INTERVAL: 600
 #    volumes:
-#      - ./oxidized:/root/.config/oxidized
+#      - ./oxidized:/home/oxidized/.config/oxidized
 #    #command removes pid-file if it exists on boot. Prevents fail on boot.
-#    command: bash -c 'rm /root/.config/oxidized/pid; /sbin/my_init'
+#    command: bash -c 'rm ~/.config/oxidized/pid; /sbin/my_init'
 #    networks:
 #           net1:
 #              ipv4_address: ${OXIDIP}
