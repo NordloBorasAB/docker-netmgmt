@@ -15,9 +15,9 @@ next_adds_job: false
 vars: {}
 groups: {}
 models: {}
-pid: "/root/.config/oxidized/pid"
+pid: "~/.config/oxidized/pid"
 crash:
-  directory: "/root/.config/oxidized/crashes"
+  directory: "~/.config/oxidized/crashes"
   hostnames: false
 stats:
   history_size: 10
@@ -35,7 +35,7 @@ output:
   git:
     user: Oxidized
     email: o@example.com
-    repo: "/root/.config/oxidized/devices.git"
+    repo: "~/.config/oxidized/devices.git"
 source:
   default: http
   debug: false
