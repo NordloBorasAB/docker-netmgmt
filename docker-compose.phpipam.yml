@@ -195,6 +195,7 @@ services:
       - IPAM_DATABASE_HOST=phpipam-mariadb
       - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
       - IPAM_DATABASE_WEBHOST=%
+      - IPAM_TRUST_X_FORWARDED=true
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
