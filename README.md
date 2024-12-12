@@ -4,7 +4,6 @@
 
 <code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
 <code>sudo sh get-docker.sh</code><br>
-<code>sudo apt install docker-compose</code>
 
 <p>This docker compose is based on dockerimages for phpIPAM, LibreNMS, Netbox, PwPush, Portainer, Oxidized and others. Hard coded versions are defined in docker-compose.yml to avoid new bugs at deployment. New versions are tested evaluated regularly and this docker compose is updated sporadically with approved versions numbers.</p>
 
