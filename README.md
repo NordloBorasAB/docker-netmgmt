@@ -42,9 +42,14 @@ Adjust the certificate and key name in "/certs/config.yml".
     /certs/config.yml:
        
     tls:
-    certificates:
-    - certFile: /etc/traefik/dynamic/temp.crt <--
-      keyFile: /etc/traefik/dynamic/temp.key <--
+      stores:
+        default:
+          defaultCertificate:
+            certFile: /etc/traefik/dynamic/temp.crt <--
+            keyFile: /etc/traefik/dynamic/temp.key <--
+      certificates:
+        - certFile: /etc/traefik/dynamic/temp.crt <--
+          keyFile: /etc/traefik/dynamic/temp.key <--
       
 <p>Perform a "docker-compose down" and "docker-compose up" and wait a couple of minutes. Refresh the site and verify the proper function of the certificate.</p>
 
