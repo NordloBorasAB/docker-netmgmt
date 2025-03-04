@@ -2,11 +2,21 @@
 
 <p>Install Docker:</p>
 
-<code>sudo apt-get update<br>
+<code>
+sudo apt-get update<br>
 sudo apt-get install ca-certificates curl<br>
 sudo install -m 0755 -d /etc/apt/keyrings<br>
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc<br>
-sudo chmod a+r /etc/apt/keyrings/docker.asc<br><br></code>
+sudo chmod a+r /etc/apt/keyrings/docker.asc<br><br>
+</code>
+
+<code>
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+</code>
 <code>curl -fsSL https://get.docker.com -o get-docker.sh</code><br>
 <code>sudo sh get-docker.sh</code><br>
 
