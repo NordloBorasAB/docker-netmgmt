@@ -1,8 +1,6 @@
-version: "3.5"
-
 services:
   traefik:
-    image: traefik:2.7
+    image: traefik:2.11.21
     container_name: traefik
     command:
       - "--global.checknewversion=false"
