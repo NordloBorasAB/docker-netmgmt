@@ -9,14 +9,12 @@
      sudo chmod a+r /etc/apt/keyrings/docker.asc<br><br>
 
 
-<code>
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-</code>
+     echo \
+       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+       $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+     sudo apt-get update
+     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 
 <p>This docker compose is based on dockerimages for phpIPAM, LibreNMS, Netbox, PwPush, Portainer, Oxidized and others. Hard coded versions are defined in docker-compose.yml to avoid new bugs at deployment. New versions are tested evaluated regularly and this docker compose is updated sporadically with approved versions numbers.</p>
