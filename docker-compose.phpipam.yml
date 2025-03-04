@@ -1,8 +1,6 @@
-version: "3.5"
-
 services:
   traefik:
-    image: traefik:2.7
+    image: traefik:2.11.21
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -40,7 +38,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: mariadb:10.5
+    image: mariadb:10.11.11
     container_name: librenms_db
     command:
       - "mysqld"
@@ -62,7 +60,7 @@ services:
     restart: unless-stopped
 
   memcached:
-    image: memcached:alpine
+    image: memcached:1.6.37-alpine
     container_name: librenms_memcached
     environment:
       - "TZ=${TZ}"
@@ -71,7 +69,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:7.2.7-alpine
     container_name: librenms_redis
     environment:
       - "TZ=${TZ}"
@@ -94,7 +92,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:22.11.0
+    image: librenms/librenms:25.2.0
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -128,7 +126,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:22.11.0
+    image: librenms/librenms:25.2.0
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -157,7 +155,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:22.11.0
+    image: librenms/librenms:25.2.0
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -189,7 +187,7 @@ services:
     restart: unless-stopped
 
   phpipam-web:
-    image: phpipam/phpipam-www:1.5x
+    image: phpipam/phpipam-www:1.7x
     environment:
       - TZ=${TZ}
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -212,7 +210,7 @@ services:
             - net1
 
   phpipam-cron:
-    image: phpipam/phpipam-cron:1.5x
+    image: phpipam/phpipam-cron:1.7x
     environment:
       - TZ=${TZ}
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -225,7 +223,7 @@ services:
             - net1
 
   phpipam-mariadb:
-    image: mariadb:10.7.4-focal
+    image: mariadb:10.11.11-focal
     environment:
       - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
     restart: unless-stopped
