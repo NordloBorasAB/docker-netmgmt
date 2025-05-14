@@ -64,7 +64,7 @@ services:
     restart: unless-stopped
 
   memcached:
-    image: memcached:1.6.37-alpine
+    image: memcached:1.6.38-alpine
     container_name: librenms_memcached
     environment:
       - "TZ=${TZ}"
@@ -73,7 +73,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:7.4.2
+    image: redis:7.4.3
     container_name: librenms_redis
     environment:
       - "TZ=${TZ}"
