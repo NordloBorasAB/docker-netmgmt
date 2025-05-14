@@ -1,8 +1,6 @@
-version: "3.5"
-
 services:
   traefik:
-    image: traefik:2.11.21
+    image: traefik:2.11.24
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -97,7 +95,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:25.2.0
+    image: librenms/librenms:25.4.0
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -131,7 +129,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:25.2.0
+    image: librenms/librenms:25.4.0
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -160,7 +158,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:25.2.0
+    image: librenms/librenms:25.4.0
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
