@@ -193,9 +193,10 @@ services:
 
 #  oxidized:
 #    restart: unless-stopped
-#    image: oxidized/oxidized:latest
+#    image: oxidized/oxidized:0.33.0
 #    environment:
-#      CONFIG_RELOAD_INTERVAL: 600
+#      - TZ=${TZ}
+#      - CONFIG_RELOAD_INTERVAL=600
 #    volumes:
 #      - ./oxidized:/home/oxidized/.config/oxidized
 #    #command removes pid-file if it exists on boot. Prevents fail on boot.
