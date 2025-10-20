@@ -2,10 +2,10 @@ tls:
   stores:
     default:
       defaultCertificate:
-        certFile: /etc/traefik/dynamic/temp.crt
-        keyFile: /etc/traefik/dynamic/temp.key
+        certFile: /etc/traefik/dynamic/server.crt
+        keyFile: /etc/traefik/dynamic/server.key
   certificates:
-    - certFile: /etc/traefik/dynamic/temp.crt
-      keyFile: /etc/traefik/dynamic/temp.key
+    - certFile: /etc/traefik/dynamic/server.crt
+      keyFile: /etc/traefik/dynamic/server.key
       stores:
         - default
