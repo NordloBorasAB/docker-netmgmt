@@ -83,7 +83,7 @@ services:
     restart: always
 
   smtp:
-    image: juanluisbaptiste/postfix
+    image: juanluisbaptiste/postfix:1.8.0
     container_name: librenms_smtp
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
