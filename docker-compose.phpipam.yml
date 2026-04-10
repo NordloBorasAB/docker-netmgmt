@@ -45,6 +45,7 @@ services:
       - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
       - IPAM_DATABASE_WEBHOST=%
       - IPAM_TRUST_X_FORWARDED=true
+      #- IPAM_DISABLE_INSTALLER=1
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
