@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:2.11.24
+    image: traefik:2.11.42
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
 
   db:
-    image: mariadb:10.11.11
+    image: mariadb:10.11.16
     container_name: librenms_db
     command:
       - "mysqld"
@@ -97,7 +97,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:25.4.0
+    image: librenms/librenms:26.3.1
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -131,7 +131,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:25.4.0
+    image: librenms/librenms:26.3.1
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -160,7 +160,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:25.4.0
+    image: librenms/librenms:26.3.1
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
