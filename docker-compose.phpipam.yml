@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:2.11.21
+    image: traefik:2.11.42
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -74,7 +74,7 @@ services:
             - net1
 
   phpipam-mariadb:
-    image: mariadb:10.11.11-focal
+    image: mariadb:10.11.16
     environment:
       - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
     restart: unless-stopped
