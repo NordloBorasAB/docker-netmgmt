@@ -273,7 +273,7 @@ services:
   #  - /opt/netbox/housekeeping.sh
 
   netbox-postgres:
-    image: postgres:18-alpine
+    image: postgres:18.4-alpine
     container_name: netbox-postgres
     env_file: ./netbox/env/postgres.env
     volumes:
