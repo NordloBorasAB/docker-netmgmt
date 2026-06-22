@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:2.11.42
+    image: traefik:2.11.50
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -13,15 +13,17 @@ services:
       - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
       - "--entrypoints.https=true"
       - "--entrypoints.https.address=:443"
-      - "--certificatesresolvers.letsencrypt"
-      - "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge"
-      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
+      #- "--certificatesresolvers.letsencrypt"
+      #- "--certificatesresolvers.letsencrypt.acme.storage=acme.json"
+      #- "--certificatesresolvers.letsencrypt.acme.email=${EMAIL}"
+      #- "--certificatesresolvers.letsencrypt.acme.httpchallenge"
+      #- "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
       - "--providers.docker"
       - "--providers.docker.watch=true"
       - "--providers.docker.exposedbydefault=false"
       - "--serverstransport.insecureskipverify=true"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
 
     ports:
       - target: 80
@@ -31,20 +33,23 @@ services:
         published: 443
         protocol: tcp
     volumes:
-      - "./acme.json:/acme.json"
+      # Uncomment the following line if you want to use your own certificates
+      #- "./certs/:/etc/traefik/dynamic/:ro"
+      #- "./acme.json:/acme.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
            - net1
     restart: unless-stopped
 
   phpipam-web:
-    image: phpipam/phpipam-www:1.7x
+    image: phpipam/phpipam-www:1.8x
     environment:
       - TZ=${TZ}
       - IPAM_DATABASE_HOST=phpipam-mariadb
       - IPAM_DATABASE_PASS=${IPAM_DATABASE_PASS}
       - IPAM_DATABASE_WEBHOST=%
       - IPAM_TRUST_X_FORWARDED=true
+      # Uncomment line below after install
       #- IPAM_DISABLE_INSTALLER=1
     restart: unless-stopped
     labels:
@@ -62,7 +67,7 @@ services:
             - net1
 
   phpipam-cron:
-    image: phpipam/phpipam-cron:1.7x
+    image: phpipam/phpipam-cron:1.8x
     environment:
       - TZ=${TZ}
       - IPAM_DATABASE_HOST=phpipam-mariadb
@@ -75,7 +80,7 @@ services:
             - net1
 
   phpipam-mariadb:
-    image: mariadb:10.11.16
+    image: mariadb:10.11.18
     environment:
       - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
     restart: unless-stopped
