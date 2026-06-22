@@ -74,7 +74,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:7.4.3
+    image: docker.io/valkey/valkey:9.0-alpine
     container_name: librenms_redis
     environment:
       - "TZ=${TZ}"
@@ -83,7 +83,7 @@ services:
     restart: always
 
   smtp:
-    image: juanluisbaptiste/postfix:1.8.0
+    image: juanluisbaptiste/postfix:1.8.3
     container_name: librenms_smtp
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
