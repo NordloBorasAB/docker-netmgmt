@@ -42,10 +42,10 @@ services:
     restart: unless-stopped
 
   db:
-    image: mariadb:10.11.18
+    image: mariadb:12.3.2
     container_name: librenms_db
     command:
-      - "mysqld"
+      - "mariadbd"
       - "--sql-mode="
       - "--innodb-file-per-table=1"
       - "--lower-case-table-names=0"
