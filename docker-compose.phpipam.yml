@@ -80,7 +80,7 @@ services:
             - net1
 
   phpipam-mariadb:
-    image: mariadb:10.11.18
+    image: mariadb:12.3.2
     environment:
       - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
     restart: unless-stopped
