@@ -237,7 +237,7 @@ services:
     env_file: ./netbox/env/netbox.env
     environment:
       SKIP_STARTUP_SCRIPTS: ${SKIP_STARTUP_SCRIPTS-false}
-    user: 'unit:root'
+    user: 'netbox:root'
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.netbox.entrypoints=https"
