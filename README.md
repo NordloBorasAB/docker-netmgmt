@@ -25,9 +25,9 @@
 <p>The easiest solution is to point the dns names to a public address on the firewall and configure dnat on port 80 towards the Docker host. Port 80 will reply with a redirect to https which is closed but you will still get valid certs without publishing any services. Add the DNS records to a private DNS and access your services with a valid certificate.
 </p>
 
-## Wildcard certificates
+## Wildcard/SAN certificates
 
-To use purchased wildcard certificates do the following:
+To use purchased wildcard/SAN certificates do the following:
 
 Remove these lines under "command" and "volumes" for the Traefik container:
        
