@@ -247,9 +247,9 @@ services:
       - "traefik.http.services.netbox.loadbalancer.server.port=8080"
     volumes:
       - ./netbox/configuration:/etc/netbox/config:z,ro
-      - ./netbox/reports:/etc/netbox/reports:z,ro
-      - ./netbox/scripts:/etc/netbox/scripts:z,ro
-      - ./netbox/netbox-media-files:/opt/netbox/netbox/media:z
+      - ./netbox/reports:/opt/netbox/netbox/reports:z,rw
+      - ./netbox/scripts:/opt/netbox/netbox/scripts:z,rw
+      - ./netbox/netbox-media-files:/opt/netbox/netbox/media:zrw
     networks:
            net1:
             ipv4_address: ${NETBOXIP}
