@@ -1,4 +1,5 @@
   phpipam-web:
+    container_name: phpipam
     image: phpipam/phpipam-www:1.8x
     environment:
       - TZ=${TZ}
@@ -24,6 +25,7 @@
             - net1
 
   phpipam-cron:
+    container_name: phpipam_cron
     image: phpipam/phpipam-cron:1.8x
     environment:
       - TZ=${TZ}
@@ -37,6 +39,7 @@
             - net1
 
   phpipam-mariadb:
+    container_name: phpipam_db
     image: mariadb:12.3.2
     environment:
       - MYSQL_ROOT_PASSWORD=${IPAMMYSQL_ROOT_PASSWORD}
