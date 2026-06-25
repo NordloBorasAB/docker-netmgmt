@@ -1,0 +1,45 @@
+  pwpush:
+    image: pglombardo/pwpush-ephemeral:latest
+    hostname: pwpush
+    container_name: pwpush
+    environment:
+      FORCE_SSL: ''
+      EXPIRE_AFTER_DAYS_DEFAULT: '1'
+      EXPIRE_AFTER_VIEWS_DEFAULT: '1'
+      RETRIEVAL_STEP_DEFAULT: 'true'
+      PWP__BRAND__SHOW_FOOTER_MENU: 'false'
+      PWP__BRAND__TITLE: 'Password Pusher'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pwpush.entrypoints=https"
+      - "traefik.http.routers.pwpush.rule=Host(`${PWPUSHDOMAIN}`)"
+      - "traefik.http.routers.pwpush.tls=true"
+      - "traefik.http.routers.pwpush.tls.domains[0].main=${PWPUSHDOMAIN}"
+      - "traefik.http.services.pwpush.loadbalancer.server.port=5100"
+    networks:
+      - net1
+    restart: always
+    
+  smokeping:
+    image: lscr.io/linuxserver/smokeping:latest
+    container_name: smokeping
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Stockholm
+    dns:
+      - 1.1.1.1
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.smokeping.entrypoints=https"
+      - "traefik.http.routers.smokeping.rule=Host(`${SMOKEDOMAIN}`)"
+      - "traefik.http.routers.smokeping.tls=true"
+      - "traefik.http.routers.smokeping.tls.domains[0].main=${SMOKEDOMAIN}"
+      - "traefik.http.services.smokeping.loadbalancer.server.port=80"
+    volumes:
+      - ./smokeping/data:/data:rw
+      - ./smokeping/config:/config:ro
+    networks:
+      - net1
+         # ipv4_address: ${SMOKEIP}
+    restart: unless-stopped
