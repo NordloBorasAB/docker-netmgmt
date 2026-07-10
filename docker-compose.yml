@@ -249,7 +249,7 @@ services:
       - ./netbox/configuration:/etc/netbox/config:z,ro
       - ./netbox/reports:/opt/netbox/netbox/reports:z,rw
       - ./netbox/scripts:/opt/netbox/netbox/scripts:z,rw
-      - ./netbox/netbox-media-files:/opt/netbox/netbox/media:zrw
+      - ./netbox/netbox-media-files:/opt/netbox/netbox/media:z,rw
     networks:
            net1:
             ipv4_address: ${NETBOXIP}
