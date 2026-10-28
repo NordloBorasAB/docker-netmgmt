@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:2.11.50
+    image: traefik:2.11.60
     container_name: traefik
     command:
       - "--global.checknewversion=false"
@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
 
   memcached:
-    image: memcached:1.6.42-alpine
+    image: memcached:1.6.45-alpine
     container_name: librenms_memcached
     environment:
       - "TZ=${TZ}"
@@ -97,7 +97,7 @@ services:
     restart: unless-stopped
 
   librenms:
-    image: librenms/librenms:26.6.1
+    image: librenms/librenms:26.10.2
     container_name: librenms
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -132,7 +132,7 @@ services:
     restart: unless-stopped
 
   dispatcher:
-    image: librenms/librenms:26.6.1
+    image: librenms/librenms:26.10.2
     container_name: librenms_dispatcher
     hostname: librenms-dispatcher
     depends_on:
@@ -161,7 +161,7 @@ services:
     restart: always
 
   syslog-ng:
-    image: librenms/librenms:26.6.1
+    image: librenms/librenms:26.10.2
     container_name: librenms_syslog
     domainname: ${LIBREDOMAIN}
     hostname: librenms
@@ -206,25 +206,25 @@ services:
 #           net1:
 #              ipv4_address: ${OXIDIP}
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    restart: unless-stopped
-    security_opt:
-      -  no-new-privileges:true
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./portainer:/data"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portainer.entrypoints=https"
-      - "traefik.http.routers.portainer.rule=Host(`${PORTAINERDOMAIN}`)"
-      - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9443"
-      - "traefik.http.routers.portainer.tls=true"
-      - "traefik.http.routers.portainer.tls.domains[0].main=${PORTAINERDOMAIN}"
-    networks:
-            - net1
+#  portainer:
+#    image: portainer/portainer-ce:latest
+#    restart: unless-stopped
+#    security_opt:
+#      -  no-new-privileges:true
+#    volumes:
+#      - "/etc/localtime:/etc/localtime:ro"
+#      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+#      - "./portainer:/data"
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.portainer.entrypoints=https"
+#      - "traefik.http.routers.portainer.rule=Host(`${PORTAINERDOMAIN}`)"
+#      - "traefik.http.services.portainer.loadbalancer.server.scheme=https"
+#      - "traefik.http.services.portainer.loadbalancer.server.port=9443"
+#      - "traefik.http.routers.portainer.tls=true"
+#     - "traefik.http.routers.portainer.tls.domains[0].main=${PORTAINERDOMAIN}"
+#    networks:
+#            - net1
   
   netbox:
     image: netboxcommunity/netbox:v4.5.10-4.0.2
@@ -273,7 +273,7 @@ services:
   #  - /opt/netbox/housekeeping.sh
 
   netbox-postgres:
-    image: postgres:18.4-alpine
+    image: postgres:18.6-alpine
     container_name: netbox-postgres
     env_file: ./netbox/env/postgres.env
     volumes:
